@@ -1,0 +1,9 @@
+name = "potato-bake-online"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./dist"
+
+[build]
+command = "npm install && npm run build"
+cwd = "."
