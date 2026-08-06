@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   NODE_ENV: production
@@ -53,8 +53,8 @@ jobs:
         run: |
           echo "=== Build structure ==="
           ls -la dist/
-          echo "=== Assets ==="
-          ls -la dist/assets/ || echo "No assets directory"
+          echo "=== JS/CSS files ==="
+          ls -la dist/*.js dist/*.css 2>/dev/null || echo "No JS/CSS files"
           echo "=== Icons ==="
           ls -la dist/icons/ || echo "No icons directory"
 
