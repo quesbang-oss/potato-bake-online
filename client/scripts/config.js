@@ -5,7 +5,7 @@
 
 export const config = {
   // ネットワークタイプ: 'websocket' または 'firebase'
-  networkType: import.meta.env.VITE_NETWORK_TYPE || 'firebase',
+  networkType: 'firebase',
   
   // WebSocketサーバーのURL（WebSocketモード時）
   wsUrl: window.location.hostname === 'localhost' 
@@ -19,13 +19,13 @@ export const config = {
   
   // Firebase設定
   firebase: {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "",
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
+    apiKey: "AIzaSyD36l6SapV90xX1i3N0D9f0_ri4F9Ru0-E",
+    authDomain: "potato-bake-online.firebaseapp.com",
+    databaseURL: "https://potato-bake-online-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "potato-bake-online",
+    storageBucket: "potato-bake-online.firebasestorage.app",
+    messagingSenderId: "402395102799",
+    appId: "1:402395102799:web:76f3d85900a7e08516b43a"
   },
   
   // デバッグモード
