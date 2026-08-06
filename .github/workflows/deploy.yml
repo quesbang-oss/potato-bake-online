@@ -38,11 +38,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Copy icons
-        run: |
-          mkdir -p dist/icons
-          cp -r client/icons/* dist/icons/ 2>/dev/null || true
-
       - name: Create .nojekyll file
         run: touch dist/.nojekyll
 
@@ -55,6 +50,8 @@ jobs:
           ls -la dist/
           echo "=== JS/CSS files ==="
           ls -la dist/*.js dist/*.css 2>/dev/null || echo "No JS/CSS files"
+          echo "=== JSON files ==="
+          ls -la dist/*.json 2>/dev/null || echo "No JSON files"
           echo "=== Icons ==="
           ls -la dist/icons/ || echo "No icons directory"
 
