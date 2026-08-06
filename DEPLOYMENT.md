@@ -2,6 +2,85 @@
 
 このプロジェクトは複数の無料ホスティングサービスでデプロイできます。
 
+## ネットワーク設定
+
+このプロジェクトは2つのネットワークモードをサポートしています：
+
+### Firebaseモード（推奨）
+- **無料枠**: 豊富（Realtime DatabaseのSparkプラン）
+- **スリープ**: なし
+- **レイテンシ**: 低い
+- **設定**: Firebaseプロジェクトが必要
+
+### WebSocketモード
+- **無料枠**: 制限あり（Render等）
+- **スリープ**: あり（15分アクセスなしで）
+- **レイテンシ**: 中程度
+- **設定**: WebSocketサーバーのデプロイが必要
+
+デフォルトはFirebaseモードです。
+
+## Firebase設定
+
+### 1. Firebaseプロジェクト作成
+
+1. [Firebase Console](https://console.firebase.google.com/) にアクセス
+2. 「プロジェクトを追加」をクリック
+3. プロジェクト名を入力（例: `potato-bake-online`）
+4. Google Analyticsは無効でOK
+5. 「プロジェクトを作成」をクリック
+
+### 2. Realtime Database有効化
+
+1. 左側メニューから「Realtime Database」を選択
+2. 「データベースを作成」をクリック
+3. ロケーションを選択（推奨: `asia-northeast1`）
+4. セキュリティルール: 「テストモードで開始」を選択
+5. 「有効にする」をクリック
+
+### 3. セキュリティルール設定
+
+Realtime Databaseの「ルール」タブで以下を設定：
+
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+```
+
+### 4. プロジェクト設定から取得
+
+1. プロジェクト設定（歯車アイコン）をクリック
+2. 「全般」タブで以下を確認：
+   - プロジェクトID
+   - APIキー
+3. 「サービスアカウント」タブでデータベースURLを確認
+
+### 5. デプロイ先で環境変数設定
+
+#### Vercelの場合
+1. プロジェクト設定 → Environment Variables
+2. 以下の環境変数を追加：
+
+```
+VITE_NETWORK_TYPE=firebase
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=https://your-project.firebaseio.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+```
+
+#### GitHub Pagesの場合
+GitHub Actionsの環境変数に追加：
+1. リポジトリ設定 → Secrets and variables → Actions
+2. 上記の環境変数をすべて追加
+
 ## フロントエンドデプロイ
 
 ### GitHub Pages (推奨)

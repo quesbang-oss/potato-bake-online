@@ -11,10 +11,12 @@ import '../styles/animations.css';
 
 import { GameEngine } from './game/GameEngine.js';
 import { NetworkManager } from './network/NetworkManager.js';
+import { FirebaseNetworkManager } from './network/FirebaseNetworkManager.js';
 import { UIManager } from './ui/UIManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { SaveManager } from './data/SaveManager.js';
 import { AchievementManager } from './data/AchievementManager.js';
+import { config } from './config.js';
 
 /**
  * アプリケーションクラス
@@ -53,7 +55,13 @@ class Application {
       await this.audioManager.initialize();
       
       // ネットワークマネージャー初期化
-      this.networkManager = new NetworkManager();
+      if (config.networkType === 'firebase') {
+        this.networkManager = new FirebaseNetworkManager();
+        console.log('Using Firebase Network Manager');
+      } else {
+        this.networkManager = new NetworkManager();
+        console.log('Using WebSocket Network Manager');
+      }
       this.networkManager.initialize();
       
       // UIマネージャー初期化
