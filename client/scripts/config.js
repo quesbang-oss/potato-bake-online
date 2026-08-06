@@ -22,21 +22,22 @@ export const config = {
   },
   
   // Firebase設定
+  // GitHub Actionsの環境変数優先、なければデフォルト値を使用
   firebase: {
-    apiKey: "AIzaSyD36l6SapV90xX1i3N0D9f0_ri4F9Ru0-E",
-    authDomain: "potato-bake-online.firebaseapp.com",
-    databaseURL: "https://potato-bake-online-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "potato-bake-online",
-    storageBucket: "potato-bake-online.firebasestorage.app",
-    messagingSenderId: "402395102799",
-    appId: "1:402395102799:web:76f3d85900a7e08516b43a",
-    measurementId: "G-XXXXXXXXXX"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_MESSAGING_SENDER_ID",
+    appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID",
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "YOUR_MEASUREMENT_ID"
   },
   
   // デバッグモード
   debug: true,
   
   // オフラインモード（サーバー接続失敗時に自動切り替え）
-  // GitHubデプロイ用に一時的にtrueに設定
-  offlineMode: true
+  // Firebase設定を完了したらfalseに変更してください
+  offlineMode: false
 };
