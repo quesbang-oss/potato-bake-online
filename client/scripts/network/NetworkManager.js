@@ -4,6 +4,7 @@
  */
 
 import { EventEmitter } from '../utils/EventEmitter.js';
+import { config } from '../config.js';
 
 export class NetworkManager extends EventEmitter {
   constructor() {
@@ -20,6 +21,8 @@ export class NetworkManager extends EventEmitter {
     this.pingInterval = null;
     this.lastPingTime = 0;
     this.ping = 0;
+    
+    this.wsUrl = config.wsUrl;
   }
   
   /**
@@ -33,7 +36,7 @@ export class NetworkManager extends EventEmitter {
    * サーバーに接続
    * @param {string} url - WebSocket URL
    */
-  connect(url = 'ws://localhost:8080') {
+  connect(url = this.wsUrl) {
     console.log('Connecting to server:', url);
     
     try {
