@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: potato-bake-online-server
-    env: node
+    name: potato-bake-online
+    env: static
     plan: free
-    buildCommand: npm install
-    startCommand: node server/index.js
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     envVars:
-      - key: PORT
-        value: 8080
+      - key: NODE_ENV
+        value: production
