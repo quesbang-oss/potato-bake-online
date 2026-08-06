@@ -50,28 +50,53 @@
 
 ## WebSocketサーバーデプロイ
 
-WebSocketサーバーはマルチプレイ機能に必要です。以下のサービスでデプロイできます：
+WebSocketサーバーはマルチプレイ機能に必要です。以下の手順でRenderにデプロイしてください：
 
-### Render (推奨)
+### Renderデプロイ手順
 
-1. [Render](https://render.com) にサインアップ
-2. 「New +」→「Web Service」をクリック
-3. GitHubリポジトリを接続
-4. 設定:
-   - Name: `potato-bake-online-server`
-   - Runtime: `Node`
-   - Build Command: `npm install`
-   - Start Command: `node server/index.js`
-   - Instance Type: `Free`
-5. 環境変数:
+1. **Renderアカウント作成**
+   - [Render](https://render.com) にサインアップ
+   - GitHubアカウントでログイン
+
+2. **新しいWeb Service作成**
+   - ダッシュボードで「New +」→「Web Service」をクリック
+   - GitHubリポジトリ `potato-bake-online` を選択
+   - 「Connect」をクリック
+
+3. **設定**
+   - **Name**: `potato-bake-online-server`
+   - **Region**: `Singapore`（日本に近いリージョン推奨）
+   - **Branch**: `main`
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server/index.js`
+   - **Instance Type**: `Free`
+
+4. **環境変数**
    - `PORT`: `8080`
-6. 「Create Web Service」をクリック
+   - `NODE_ENV`: `production`
 
-デプロイ後、URLを環境変数 `VITE_WS_URL` に設定してフロントエンドを再デプロイしてください。
+5. **詳細設定**
+   - **Health Check Path**: `/health`
+   - **Auto Deploy**: `Off`（手動デプロイ推奨）
 
-### 無料枠
-- Render: 無料枠あり（ただしスリープします）
-- 複数のWebSocketサーバーをデプロイしてロードバランシングすることを推奨
+6. **デプロイ**
+   - 「Create Web Service」をクリック
+   - デプロイ完了まで数分待つ
+
+7. **URL確認**
+   - デプロイ完了後、URLを確認（例: `https://potato-bake-online-server.onrender.com`）
+   - `https://[URL]/health` でヘルスチェック
+
+### 無料枠の制限
+- Render無料枠: スリープします（15分アクセスがないと）
+- 最初のリクエストで起動に数秒かかります
+- 複数のサーバーをデプロイして負荷分散を推奨
+
+### 注意点
+- 無料枠はスリープするため、最初の接続に時間がかかります
+- 本番環境では有料プランの検討を推奨
+- 複数のリージョンにサーバーをデプロイしてレイテンシを最小化
 
 ## オフラインモード
 
