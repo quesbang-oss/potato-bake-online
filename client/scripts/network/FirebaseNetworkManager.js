@@ -32,13 +32,9 @@ export class FirebaseNetworkManager extends EventEmitter {
     console.log('Initializing FirebaseNetworkManager...');
     console.log('Firebase config:', this.firebaseConfig);
     
-    // Firebase設定が不足している場合
+    // Firebase設定が不足している場合でも接続を試みる
     if (!this.firebaseConfig.databaseURL) {
-      console.log('Firebase configuration incomplete, using offline mode');
-      this.isOfflineMode = true;
-      this.playerId = 'offline-player-' + Date.now();
-      this.emit('offlineMode', true);
-      return;
+      console.warn('Firebase configuration incomplete, but will try anyway');
     }
     
     try {
@@ -50,12 +46,16 @@ export class FirebaseNetworkManager extends EventEmitter {
       this.playerId = 'player-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
       
       this.isConnected = true;
+      this.isOfflineMode = false;
       this.emit('connected', { playerId: this.playerId });
       
       console.log('Firebase initialized successfully');
       
     } catch (error) {
       console.error('Firebase initialization failed:', error);
+      console.error('Error details:', error.message, error.code);
+      
+      // オフラインモードに切り替え
       this.isOfflineMode = true;
       this.playerId = 'offline-player-' + Date.now();
       this.emit('offlineMode', true);
@@ -63,15 +63,26 @@ export class FirebaseNetworkManager extends EventEmitter {
   }
   
   /**
-   * 接続（Firebaseでは初期化時に接続）
+   * 接続（強制再接続）
    */
   connect() {
+    console.log('Connect called, current mode:', this.isOfflineMode ? 'offline' : 'online');
+    
+    // オフラインモードでも再試行
     if (this.isOfflineMode) {
-      console.log('Cannot connect in offline mode');
+      console.log('Attempting to reinitialize Firebase...');
+      this.isOfflineMode = false;
+      this.initialize();
       return;
     }
     
-    console.log('Firebase connection already established during initialization');
+    if (!this.db) {
+      console.log('Firebase not initialized, initializing...');
+      this.initialize();
+      return;
+    }
+    
+    console.log('Firebase connection already established');
   }
   
   /**

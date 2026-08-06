@@ -29,7 +29,7 @@ export const config = {
   },
   
   // デバッグモード
-  debug: import.meta.env.DEV,
+  debug: true,
   
   // オフラインモード（サーバー接続失敗時に自動切り替え）
   offlineMode: false
