@@ -12,11 +12,10 @@ const wss = new WebSocketServer({ server });
 
 // ミドルウェア設定
 app.use(express.json());
-app.use(express.static('dist'));
 
-// 静的ファイル配信
-app.get('/', (req, res) => {
-  res.sendFile(resolve('dist/index.html'));
+// ヘルスチェックエンドポイント
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // マネージャー初期化
