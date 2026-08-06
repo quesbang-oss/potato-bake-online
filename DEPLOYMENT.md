@@ -1,28 +1,21 @@
 # デプロイ方法
 
-このプロジェクトは複数の無料ホスティングサービスでデプロイできます。
+このプロジェクトはFirebaseを使用してデプロイします。FirebaseはHostingとRealtime Databaseの両方を提供しています。
 
-## ネットワーク設定
+## Firebaseデプロイ（推奨）
 
-このプロジェクトは2つのネットワークモードをサポートしています：
+Firebaseはすべての機能を1つのプラットフォームで提供しています：
 
-### Firebaseモード（推奨）
-- **無料枠**: 豊富（Realtime DatabaseのSparkプラン）
-- **スリープ**: なし
-- **レイテンシ**: 低い
-- **設定**: Firebaseプロジェクトが必要
+### Firebaseのメリット
+- **無料枠**: HostingとRealtime Databaseが豊富
+- **スリープなし**: 24時間365日利用可能
+- **低レイテンシ**: グローバルCDN
+- **設定簡単**: 1つのコンソールで管理
+- **自動HTTPS**: SSL証明書自動
 
-### WebSocketモード
-- **無料枠**: 制限あり（Render等）
-- **スリープ**: あり（15分アクセスなしで）
-- **レイテンシ**: 中程度
-- **設定**: WebSocketサーバーのデプロイが必要
+### Firebaseプロジェクト設定
 
-デフォルトはFirebaseモードです。
-
-## Firebase設定
-
-### 1. Firebaseプロジェクト作成
+#### 1. Firebaseプロジェクト作成
 
 1. [Firebase Console](https://console.firebase.google.com/) にアクセス
 2. 「プロジェクトを追加」をクリック
@@ -30,7 +23,18 @@
 4. Google Analyticsは無効でOK
 5. 「プロジェクトを作成」をクリック
 
-### 2. Realtime Database有効化
+#### 2. Hosting有効化
+
+1. 左側メニューから「Hosting」を選択
+2. 「始める」をクリック
+3. プロジェクトを選択（既存のプロジェクトを選択）
+4. ビルド設定:
+   - パブリックディレクトリ: `dist`
+   - フレームワーク: なし
+   - 単一ページアプリ: 有効（SPAルーティング用）
+5. 「完了」をクリック
+
+#### 3. Realtime Database有効化
 
 1. 左側メニューから「Realtime Database」を選択
 2. 「データベースを作成」をクリック
@@ -38,7 +42,7 @@
 4. セキュリティルール: 「テストモードで開始」を選択
 5. 「有効にする」をクリック
 
-### 3. セキュリティルール設定
+#### 4. セキュリティルール設定
 
 Realtime Databaseの「ルール」タブで以下を設定：
 
@@ -51,7 +55,7 @@ Realtime Databaseの「ルール」タブで以下を設定：
 }
 ```
 
-### 4. プロジェクト設定から取得
+#### 5. Firebase設定情報取得
 
 1. プロジェクト設定（歯車アイコン）をクリック
 2. 「全般」タブで以下を確認：
@@ -59,13 +63,47 @@ Realtime Databaseの「ルール」タブで以下を設定：
    - APIキー
 3. 「サービスアカウント」タブでデータベースURLを確認
 
-### 5. デプロイ先で環境変数設定
+#### 6. ローカル環境設定
 
-#### Vercelの場合
-1. プロジェクト設定 → Environment Variables
-2. 以下の環境変数を追加：
+Firebase CLIをインストール：
 
+```bash
+npm install -g firebase-tools
 ```
+
+Firebaseにログイン：
+
+```bash
+firebase login
+```
+
+プロジェクトを初期化：
+
+```bash
+firebase init
+```
+
+- Hosting: 有効
+- Realtime Database: 有効
+- 既存のプロジェクトを選択
+
+#### 7. Firebase設定ファイル更新
+
+`.firebaserc` ファイルでプロジェクトIDを確認：
+
+```json
+{
+  "projects": {
+    "default": "your-project-id"
+  }
+}
+```
+
+#### 8. 環境変数設定
+
+`.env.local` ファイルを作成（ローカル開発用）：
+
+```env
 VITE_NETWORK_TYPE=firebase
 VITE_FIREBASE_API_KEY=your-api-key
 VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
@@ -76,12 +114,33 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 ```
 
-#### GitHub Pagesの場合
-GitHub Actionsの環境変数に追加：
-1. リポジトリ設定 → Secrets and variables → Actions
-2. 上記の環境変数をすべて追加
+#### 9. ビルドとデプロイ
 
-## フロントエンドデプロイ
+ビルド：
+
+```bash
+npm run build
+```
+
+デプロイ：
+
+```bash
+firebase deploy
+```
+
+### GitHub Actionsを使用した自動デプロイ
+
+GitHub ActionsからFirebaseにデプロイする場合：
+
+1. Firebase Consoleでサービスアカウントキーを作成
+2. GitHubリポジトリのSecretsに保存
+3. GitHub ActionsでFirebase CLIを使用
+
+詳細は [`.github/workflows/deploy-firebase.yml`](./.github/workflows/deploy-firebase.yml) を参照してください。
+
+## その他のホスティングサービス
+
+Firebase以外を使用する場合の設定も残していますが、推奨はFirebaseです。
 
 ### GitHub Pages (推奨)
 
