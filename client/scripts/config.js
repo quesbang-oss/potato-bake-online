@@ -5,13 +5,13 @@
 
 export const config = {
   // WebSocketサーバーのURL
-  // GitHub Pagesから接続する場合は、公開されているサーバーのURLを指定
+  // RenderでデプロイしたサーバーのURLに変更してください
   wsUrl: import.meta.env.VITE_WS_URL || 
-         (window.location.hostname === 'localhost' ? 'ws://localhost:8080' : 'wss://your-server.com'),
+         (window.location.hostname === 'localhost' ? 'ws://localhost:8080' : 'wss://potato-bake-online-server.onrender.com'),
   
   // APIエンドポイント
   apiBaseUrl: import.meta.env.VITE_API_URL || 
-              (window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://your-server.com'),
+              (window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://potato-bake-online-server.onrender.com'),
   
   // デバッグモード
   debug: import.meta.env.DEV
