@@ -1,0 +1,30 @@
+{
+  "name": "potato-bake-online",
+  "version": "1.0.0",
+  "description": "オンライン協力バカゲー - ポテト焼きオンライン",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "game",
+    "online",
+    "websocket",
+    "cooperative",
+    "baka-game"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.13.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

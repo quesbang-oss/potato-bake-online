@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="ポテト焼きオンライン - オンライン協力バカゲー">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>ポテト焼きオンライン</title>
+  
+  <!-- PWAマニフェスト -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/ui.css">
+  <link rel="stylesheet" href="/styles/game.css">
+  <link rel="stylesheet" href="/styles/animations.css">
+</head>
+<body>
+  <!-- ロード画面 -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <div class="potato-icon">🥔</div>
+        <h1>ポテト焼きオンライン</h1>
+      </div>
+      <div class="loading-bar">
+        <div class="loading-progress" id="loading-progress"></div>
+      </div>
+      <p class="loading-text" id="loading-text">読み込み中...</p>
+    </div>
+  </div>
+  
+  <!-- メインメニュー -->
+  <div id="main-menu" class="screen hidden">
+    <div class="menu-container">
+      <div class="menu-logo">
+        <div class="potato-icon">🥔</div>
+        <h1>ポテト焼きオンライン</h1>
+        <p class="subtitle">Online Cooperative Baka Game</p>
+      </div>
+      
+      <div class="menu-buttons">
+        <button class="menu-btn primary" id="btn-create-room">
+          <span class="btn-icon">🏠</span>
+          <span class="btn-text">ルーム作成</span>
+        </button>
+        
+        <button class="menu-btn secondary" id="btn-join-room">
+          <span class="btn-icon">🚪</span>
+          <span class="btn-text">ルーム参加</span>
+        </button>
+        
+        <button class="menu-btn secondary" id="btn-ranking">
+          <span class="btn-icon">🏆</span>
+          <span class="btn-text">ランキング</span>
+        </button>
+        
+        <button class="menu-btn secondary" id="btn-achievements">
+          <span class="btn-icon">⭐</span>
+          <span class="btn-text">実績</span>
+        </button>
+        
+        <button class="menu-btn secondary" id="btn-settings">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-text">設定</span>
+        </button>
+      </div>
+      
+      <div class="player-info">
+        <div class="player-name" id="menu-player-name">Player</div>
+        <div class="player-stats" id="menu-player-stats"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ルーム参加画面 -->
+  <div id="join-screen" class="screen hidden">
+    <div class="screen-container">
+      <button class="back-btn" id="btn-back-join">← 戻る</button>
+      
+      <h2>ルームに参加</h2>
+      
+      <div class="input-group">
+        <label for="room-code-input">ルームコード</label>
+        <input type="text" id="room-code-input" placeholder="6桁のコードを入力" maxlength="6">
+      </div>
+      
+      <div class="input-group">
+        <label for="player-name-input">プレイヤー名</label>
+        <input type="text" id="player-name-input" placeholder="名前を入力" maxlength="20">
+      </div>
+      
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="spectator-mode">
+          <span>観戦モード</span>
+        </label>
+      </div>
+      
+      <button class="action-btn primary" id="btn-join-submit">参加</button>
+    </div>
+  </div>
+  
+  <!-- ルーム待機画面 -->
+  <div id="lobby-screen" class="screen hidden">
+    <div class="lobby-container">
+      <div class="lobby-header">
+        <h2>ルーム: <span id="lobby-room-code">------</span></h2>
+        <button class="back-btn" id="btn-leave-room">退出</button>
+      </div>
+      
+      <div class="lobby-content">
+        <div class="player-list" id="lobby-player-list">
+          <!-- プレイヤーリストが動的に追加される -->
+        </div>
+        
+        <div class="lobby-chat">
+          <div class="chat-messages" id="lobby-chat-messages"></div>
+          <div class="chat-input">
+            <input type="text" id="lobby-chat-input" placeholder="メッセージを入力..." maxlength="100">
+            <button class="send-btn" id="btn-send-chat">送信</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lobby-footer">
+        <button class="action-btn primary" id="btn-ready" disabled>Ready</button>
+        <button class="action-btn primary" id="btn-start-game" disabled>ゲーム開始</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ゲーム画面 -->
+  <div id="game-screen" class="screen hidden">
+    <div class="game-container">
+      <!-- ゲーム情報バー -->
+      <div class="game-info-bar">
+        <div class="timer-display">
+          <span class="timer-icon">⏱️</span>
+          <span class="timer-value" id="game-timer">180</span>
+        </div>
+        
+        <div class="room-code-display">
+          <span id="game-room-code">------</span>
+        </div>
+        
+        <div class="connection-status">
+          <span class="status-indicator" id="connection-status"></span>
+          <span class="ping-display" id="ping-display">--ms</span>
+        </div>
+      </div>
+      
+      <!-- ゲームキャンバス -->
+      <canvas id="game-canvas"></canvas>
+      
+      <!-- ゲームUIオーバーレイ -->
+      <div class="game-ui-overlay">
+        <!-- ポテト状態表示 -->
+        <div class="potato-status">
+          <div class="status-item">
+            <span class="status-label">温度</span>
+            <span class="status-value" id="potato-temperature">20°C</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">焼き加減</span>
+            <span class="status-value" id="potato-doneness">0%</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">火力</span>
+            <span class="status-value" id="heat-level">0%</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">状態</span>
+            <span class="status-value" id="potato-status">生</span>
+          </div>
+        </div>
+        
+        <!-- アクションボタン -->
+        <div class="action-buttons">
+          <button class="action-btn" data-action="heatUp" title="火力UP">🔥</button>
+          <button class="action-btn" data-action="heatDown" title="火力DOWN">❄️</button>
+          <button class="action-btn" data-action="addOil" title="油">🫒</button>
+          <button class="action-btn" data-action="addSalt" title="塩">🧂</button>
+          <button class="action-btn" data-action="addButter" title="バター">🧈</button>
+          <button class="action-btn" data-action="throwIce" title="氷">🧊</button>
+          <button class="action-btn" data-action="addWind" title="送風">💨</button>
+          <button class="action-btn" data-action="addWater" title="水">💧</button>
+          <button class="action-btn" data-action="microwave" title="電子レンジ">📦</button>
+          <button class="action-btn" data-action="flamethrower" title="火炎放射器">🔫</button>
+          <button class="action-btn" data-action="fan" title="扇風機">🌀</button>
+          <button class="action-btn" data-action="spaceLaser" title="宇宙レーザー">🔦</button>
+          <button class="action-btn" data-action="blackHole" title="ブラックホール">🕳️</button>
+        </div>
+      </div>
+      
+      <!-- イベント通知 -->
+      <div class="event-notification" id="event-notification"></div>
+      
+      <!-- ゲーム結果画面 -->
+      <div class="game-result hidden" id="game-result">
+        <div class="result-content">
+          <h2 id="result-title">結果</h2>
+          <div class="result-icon" id="result-icon">🥔</div>
+          <p class="result-message" id="result-message"></p>
+          <div class="result-stats" id="result-stats"></div>
+          <div class="result-buttons">
+            <button class="action-btn primary" id="btn-play-again">もう一度</button>
+            <button class="action-btn secondary" id="btn-back-to-lobby">ロビーに戻る</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ランキング画面 -->
+  <div id="ranking-screen" class="screen hidden">
+    <div class="screen-container">
+      <button class="back-btn" id="btn-back-ranking">← 戻る</button>
+      
+      <h2>ランキング</h2>
+      
+      <div class="ranking-tabs">
+        <button class="tab-btn active" data-category="perfect">Perfect</button>
+        <button class="tab-btn" data-category="explosion">爆発</button>
+        <button class="tab-btn" data-category="burnt">焦げ</button>
+        <button class="tab-btn" data-category="playtime">プレイ時間</button>
+      </div>
+      
+      <div class="ranking-list" id="ranking-list">
+        <!-- ランキングデータが動的に追加される -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 実績画面 -->
+  <div id="achievements-screen" class="screen hidden">
+    <div class="screen-container">
+      <button class="back-btn" id="btn-back-achievements">← 戻る</button>
+      
+      <h2>実績</h2>
+      
+      <div class="achievement-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="achievement-count">0</span>
+          <span class="stat-label">解除済み</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="achievement-total">0</span>
+          <span class="stat-label">全実績</span>
+        </div>
+      </div>
+      
+      <div class="achievement-list" id="achievement-list">
+        <!-- 実績リストが動的に追加される -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 設定画面 -->
+  <div id="settings-screen" class="screen hidden">
+    <div class="screen-container">
+      <button class="back-btn" id="btn-back-settings">← 戻る</button>
+      
+      <h2>設定</h2>
+      
+      <div class="settings-groups">
+        <div class="settings-group">
+          <h3>音量</h3>
+          <div class="setting-item">
+            <label for="volume-bgm">BGM</label>
+            <input type="range" id="volume-bgm" min="0" max="100" value="50">
+            <span class="setting-value" id="volume-bgm-value">50%</span>
+          </div>
+          <div class="setting-item">
+            <label for="volume-se">効果音</label>
+            <input type="range" id="volume-se" min="0" max="100" value="50">
+            <span class="setting-value" id="volume-se-value">50%</span>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>画質</h3>
+          <div class="setting-item">
+            <label for="quality-select">画質設定</label>
+            <select id="quality-select">
+              <option value="low">低</option>
+              <option value="medium">中</option>
+              <option value="high" selected>高</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>言語</h3>
+          <div class="setting-item">
+            <label for="language-select">言語</label>
+            <select id="language-select">
+              <option value="ja" selected>日本語</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3>操作説明</h3>
+          <div class="controls-guide">
+            <p>• アクションボタンをタップ/クリックで操作</p>
+            <p>• 全プレイヤーが同時に操作可能</p>
+            <p>• 制限時間内にPerfectを目指そう</p>
+            <p>• 火力100%に注意！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 通知 -->
+  <div class="notification-container" id="notification-container"></div>
+  
+  <!-- FPS表示 -->
+  <div class="fps-display" id="fps-display">60 FPS</div>
+  
+  <!-- JavaScript -->
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

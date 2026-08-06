@@ -1,0 +1,791 @@
+/**
+ * ゲーム固有CSS - ポテト焼きオンライン
+ */
+
+/* ゲームキャンバス用スタイル */
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #2a2a4e 100%);
+}
+
+/* ゲームオーバーレイ */
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 炎エフェクト */
+.flame-effect {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 100px;
+  background: linear-gradient(to top, rgba(255, 100, 0, 0.8), rgba(255, 200, 0, 0.4), transparent);
+  filter: blur(10px);
+  animation: flameFlicker 0.5s ease-in-out infinite;
+}
+
+@keyframes flameFlicker {
+  0%, 100% {
+    opacity: 0.8;
+    height: 100px;
+  }
+  50% {
+    opacity: 1;
+    height: 120px;
+  }
+}
+
+/* 煙エフェクト */
+.smoke-effect {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgba(100, 100, 100, 0.5);
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: smokeRise 3s ease-out infinite;
+}
+
+@keyframes smokeRise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-200px) scale(2);
+    opacity: 0;
+  }
+}
+
+/* 火花エフェクト */
+.spark-effect {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ffff00;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffff00;
+  animation: sparkFly 1s ease-out infinite;
+}
+
+@keyframes sparkFly {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty));
+    opacity: 0;
+  }
+}
+
+/* 水エフェクト */
+.water-effect {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(0, 150, 255, 0.6), transparent);
+  border-radius: 50%;
+  animation: waterSplash 0.5s ease-out;
+}
+
+@keyframes waterSplash {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 氷エフェクト */
+.ice-effect {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(150, 200, 255, 0.8), transparent);
+  border-radius: 50%;
+  animation: iceMelt 2s ease-out;
+}
+
+@keyframes iceMelt {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* レーザーエフェクト */
+.laser-effect {
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, #ff00ff, transparent);
+  animation: laserBeam 0.3s ease-out;
+}
+
+@keyframes laserBeam {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+/* ブラックホールエフェクト */
+.blackhole-effect {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #000000, #1a0033, transparent);
+  border-radius: 50%;
+  animation: blackholeSpin 2s linear infinite;
+}
+
+@keyframes blackholeSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* 爆発エフェクト */
+.explosion-effect {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #ffffff, #ffff00, #ff8800, #ff0000, transparent);
+  border-radius: 50%;
+  animation: explosionExpand 0.5s ease-out;
+}
+
+@keyframes explosionExpand {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+/* 宇宙崩壊エフェクト */
+.universe-collapse-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #000000, #1a0033, #2a0055, transparent);
+  animation: universeCollapse 5s ease-in-out;
+}
+
+@keyframes universeCollapse {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* イベントアイコン */
+.event-icon {
+  position: absolute;
+  font-size: 48px;
+  animation: eventIconAppear 1s ease-out;
+}
+
+@keyframes eventIconAppear {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* パーティクル */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: particleMove 2s ease-out infinite;
+}
+
+@keyframes particleMove {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty));
+    opacity: 0;
+  }
+}
+
+/* コンロ拡大エフェクト */
+.stove-expand {
+  animation: stoveExpand 1s ease-in-out;
+}
+
+@keyframes stoveExpand {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+
+/* 家燃えるエフェクト */
+.house-burn {
+  animation: houseBurn 2s ease-in-out;
+}
+
+@keyframes houseBurn {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.5) saturate(2);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(2) saturate(3);
+  }
+}
+
+/* 街燃えるエフェクト */
+.city-burn {
+  animation: cityBurn 3s ease-in-out;
+}
+
+@keyframes cityBurn {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* 地球燃えるエフェクト */
+.earth-burn {
+  animation: earthBurn 4s ease-in-out;
+}
+
+@keyframes earthBurn {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+
+/* 銀河燃えるエフェクト */
+.galaxy-burn {
+  animation: galaxyBurn 5s ease-in-out;
+}
+
+@keyframes galaxyBurn {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0.8;
+    transform: scale(1.5);
+  }
+  60% {
+    opacity: 0.5;
+    transform: scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+/* 宇宙崩壊エフェクト */
+.cosmos-collapse {
+  animation: cosmosCollapse 6s ease-in-out;
+}
+
+@keyframes cosmosCollapse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+  75% {
+    opacity: 0.3;
+    transform: scale(0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* ポテト描画用キャンバスレイヤー */
+.potato-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* コンロ描画用キャンバスレイヤー */
+.stove-layer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 背景レイヤー */
+.background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* エフェクトレイヤー */
+.effects-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* UIレイヤー */
+.ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ui-layer > * {
+  pointer-events: auto;
+}
+
+/* 温度ゲージ */
+.temperature-gauge {
+  position: absolute;
+  width: 20px;
+  height: 200px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.temperature-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, #0000ff, #00ff00, #ffff00, #ff8800, #ff0000);
+  transition: height 0.3s ease;
+}
+
+/* 焼き加減ゲージ */
+.doneness-gauge {
+  position: absolute;
+  width: 200px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.doneness-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(to right, #00ff00, #ffff00, #ff8800, #ff0000);
+  transition: width 0.3s ease;
+}
+
+/* 火力ゲージ */
+.heat-gauge {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.heat-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, #ff0000, #ff8800, #ffff00);
+  transition: height 0.3s ease;
+}
+
+/* タイマーアラート */
+.timer-alert {
+  animation: timerAlert 1s ease-in-out infinite;
+}
+
+@keyframes timerAlert {
+  0%, 100% {
+    color: var(--text-primary);
+  }
+  50% {
+    color: var(--danger-color);
+    text-shadow: 0 0 20px var(--danger-color);
+  }
+}
+
+/* 完了演出 */
+.perfect-effect {
+  animation: perfectEffect 2s ease-out;
+}
+
+@keyframes perfectEffect {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 敗北演出 */
+.defeat-effect {
+  animation: defeatEffect 2s ease-out;
+}
+
+@keyframes defeatEffect {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+/* スコアポップアップ */
+.score-popup {
+  position: absolute;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent-color);
+  animation: scorePopup 1s ease-out;
+  pointer-events: none;
+}
+
+@keyframes scorePopup {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* コンボ表示 */
+.combo-display {
+  position: absolute;
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-shadow: 0 0 20px var(--primary-color);
+  animation: comboPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes comboPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ランク表示 */
+.rank-display {
+  position: absolute;
+  font-size: 36px;
+  font-weight: bold;
+  animation: rankAppear 1s ease-out;
+}
+
+@keyframes rankAppear {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 実績解除表示 */
+.achievement-popup {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--accent-color);
+  border-radius: 10px;
+  animation: achievementPopup 3s ease-out;
+  z-index: 1000;
+}
+
+@keyframes achievementPopup {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ミニマップ */
+.minimap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 150px;
+  height: 150px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* プレイヤーリスト（ゲーム中） */
+.game-player-list {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  max-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.game-player-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.game-player-name {
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.game-player-action {
+  font-size: 16px;
+}
+
+/* アクション履歴 */
+.action-history {
+  position: absolute;
+  bottom: 150px;
+  left: 20px;
+  max-width: 200px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.action-history-item {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+/* イベント履歴 */
+.event-history {
+  position: absolute;
+  bottom: 150px;
+  right: 20px;
+  max-width: 200px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.event-history-item {
+  font-size: 12px;
+  color: var(--accent-color);
+  margin-bottom: 5px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .temperature-gauge {
+    width: 15px;
+    height: 150px;
+  }
+  
+  .doneness-gauge {
+    width: 150px;
+    height: 15px;
+  }
+  
+  .heat-gauge {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .minimap {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .game-player-list {
+    max-width: 150px;
+  }
+  
+  .action-history,
+  .event-history {
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .temperature-gauge {
+    width: 10px;
+    height: 100px;
+  }
+  
+  .doneness-gauge {
+    width: 100px;
+    height: 10px;
+  }
+  
+  .heat-gauge {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .minimap {
+    display: none;
+  }
+  
+  .game-player-list {
+    display: none;
+  }
+  
+  .action-history,
+  .event-history {
+    display: none;
+  }
+}
