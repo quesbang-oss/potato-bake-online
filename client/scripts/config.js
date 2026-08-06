@@ -31,7 +31,8 @@ export const config = {
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_PROJECT_ID.appspot.com",
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_MESSAGING_SENDER_ID",
     appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID",
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "YOUR_MEASUREMENT_ID"
+    // measurementIdはFirebase Analytics使用時のみ必須
+    ...(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID && { measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID })
   },
   
   // デバッグモード
