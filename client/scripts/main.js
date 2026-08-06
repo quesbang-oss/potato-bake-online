@@ -3,6 +3,12 @@
  * ゲームのエントリーポイント
  */
 
+// Import CSS files
+import '../styles/main.css';
+import '../styles/ui.css';
+import '../styles/game.css';
+import '../styles/animations.css';
+
 import { GameEngine } from './game/GameEngine.js';
 import { NetworkManager } from './network/NetworkManager.js';
 import { UIManager } from './ui/UIManager.js';
