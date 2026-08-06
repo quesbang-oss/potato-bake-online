@@ -1,10 +1,15 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
+import { fileURLToPath } from 'url';
+
+// __dirnameのES Module対応
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = resolve(__filename, '..');
 
 export default defineConfig({
   root: 'client',
-  base: './',
+  base: '/',
   build: {
     outDir: '../dist',
     emptyOutDir: true,

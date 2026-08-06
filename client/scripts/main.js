@@ -266,6 +266,8 @@ if (document.readyState === 'loading') {
 }
 
 // グローバルにエクスポート（デバッグ用）
-window.app = app;
+if (typeof window !== 'undefined') {
+  window.app = app;
+}
 
 export default app;

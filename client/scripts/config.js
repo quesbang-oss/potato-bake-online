@@ -8,14 +8,18 @@ export const config = {
   networkType: 'firebase',
   
   // WebSocketサーバーのURL（WebSocketモード時）
-  wsUrl: window.location.hostname === 'localhost' 
-    ? 'ws://localhost:8080' 
-    : 'wss://potato-bake-online-server.onrender.com',
+  get wsUrl() {
+    return (typeof window !== 'undefined' && window.location.hostname === 'localhost')
+      ? 'ws://localhost:8080'
+      : 'wss://potato-bake-online-server.onrender.com';
+  },
   
   // APIエンドポイント
-  apiBaseUrl: window.location.hostname === 'localhost' 
-    ? 'http://localhost:8080' 
-    : 'https://potato-bake-online-server.onrender.com',
+  get apiBaseUrl() {
+    return (typeof window !== 'undefined' && window.location.hostname === 'localhost')
+      ? 'http://localhost:8080'
+      : 'https://potato-bake-online-server.onrender.com';
+  },
   
   // Firebase設定
   firebase: {
@@ -25,12 +29,14 @@ export const config = {
     projectId: "potato-bake-online",
     storageBucket: "potato-bake-online.firebasestorage.app",
     messagingSenderId: "402395102799",
-    appId: "1:402395102799:web:76f3d85900a7e08516b43a"
+    appId: "1:402395102799:web:76f3d85900a7e08516b43a",
+    measurementId: "G-XXXXXXXXXX"
   },
   
   // デバッグモード
   debug: true,
   
   // オフラインモード（サーバー接続失敗時に自動切り替え）
-  offlineMode: false
+  // GitHubデプロイ用に一時的にtrueに設定
+  offlineMode: true
 };
