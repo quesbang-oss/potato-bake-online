@@ -27,6 +27,11 @@ export default defineConfig({
   },
   // Inline all assets for maximum compatibility
   assetsInlineLimit: 100000000,
+  // Define global constants
+  define: {
+    'import.meta.env.VITE_WS_URL': JSON.stringify(process.env.VITE_WS_URL || ''),
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || '')
+  },
   plugins: [
     {
       name: 'copy-manifest',
