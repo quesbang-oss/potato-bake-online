@@ -19,6 +19,8 @@ export default defineConfig({
       }
     }
   },
+  // Ensure assets are inlined for maximum compatibility
+  assetsInlineLimit: 4096,
   server: {
     port: 3000,
     proxy: {
