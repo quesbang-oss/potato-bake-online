@@ -6,6 +6,7 @@
 import { EventEmitter } from '../utils/EventEmitter.js';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, onValue, push, onDisconnect, remove, get, update } from 'firebase/database';
+import { config } from '../config.js';
 
 export class FirebaseNetworkManager extends EventEmitter {
   constructor() {
@@ -20,16 +21,8 @@ export class FirebaseNetworkManager extends EventEmitter {
     this.playerRef = null;
     this.roomRef = null;
     
-    // Firebase設定（環境変数またはデフォルト）
-    this.firebaseConfig = {
-      apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-      authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-      databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "",
-      projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-      storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-      appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
-    };
+    // Firebase設定（config.jsから取得）
+    this.firebaseConfig = config.firebase;
   }
   
   /**
@@ -37,6 +30,7 @@ export class FirebaseNetworkManager extends EventEmitter {
    */
   initialize() {
     console.log('Initializing FirebaseNetworkManager...');
+    console.log('Firebase config:', this.firebaseConfig);
     
     // Firebase設定が不足している場合
     if (!this.firebaseConfig.databaseURL) {
