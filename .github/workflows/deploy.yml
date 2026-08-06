@@ -49,6 +49,15 @@ jobs:
       - name: Create 404.html for SPA routing
         run: cp dist/index.html dist/404.html
 
+      - name: Verify build structure
+        run: |
+          echo "=== Build structure ==="
+          ls -la dist/
+          echo "=== Assets ==="
+          ls -la dist/assets/ || echo "No assets directory"
+          echo "=== Icons ==="
+          ls -la dist/icons/ || echo "No icons directory"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
