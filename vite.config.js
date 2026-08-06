@@ -7,20 +7,20 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
-    assetsDir: 'assets',
+    assetsDir: '',
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'client/index.html')
       },
       output: {
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        entryFileNames: '[name]-[hash].js',
+        chunkFileNames: '[name]-[hash].js',
+        assetFileNames: '[name]-[hash].[ext]'
       }
     }
   },
-  // Ensure assets are inlined for maximum compatibility
-  assetsInlineLimit: 4096,
+  // Inline all assets for maximum compatibility
+  assetsInlineLimit: 100000000,
   server: {
     port: 3000,
     proxy: {
