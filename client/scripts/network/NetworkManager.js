@@ -14,6 +14,7 @@ export class NetworkManager extends EventEmitter {
     this.playerId = null;
     this.roomCode = null;
     this.isConnected = false;
+    this.isOfflineMode = false;
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
     this.reconnectDelay = 3000;
@@ -30,6 +31,15 @@ export class NetworkManager extends EventEmitter {
    */
   initialize() {
     console.log('Initializing NetworkManager...');
+    
+    // オフラインモードの場合
+    if (config.offlineMode || !this.wsUrl) {
+      console.log('Running in offline mode');
+      this.isOfflineMode = true;
+      this.playerId = 'offline-player-' + Date.now();
+      this.emit('offlineMode', true);
+      return;
+    }
   }
   
   /**
@@ -37,6 +47,17 @@ export class NetworkManager extends EventEmitter {
    * @param {string} url - WebSocket URL
    */
   connect(url = this.wsUrl) {
+    if (this.isOfflineMode) {
+      console.log('Cannot connect in offline mode');
+      return;
+    }
+    
+    if (!url) {
+      console.error('No WebSocket URL configured');
+      this.emit('error', 'No server URL configured');
+      return;
+    }
+    
     console.log('Connecting to server:', url);
     
     try {
@@ -50,6 +71,7 @@ export class NetworkManager extends EventEmitter {
     } catch (error) {
       console.error('Failed to connect:', error);
       this.emit('error', '接続に失敗しました');
+      this.emit('offlineMode', true);
     }
   }
   
@@ -280,6 +302,13 @@ export class NetworkManager extends EventEmitter {
   handleError(error) {
     console.error('WebSocket error:', error);
     this.emit('error', error.error || 'エラーが発生しました');
+    
+    // WebSocket接続エラーの場合、オフラインモードに切り替え
+    if (error.type === 'error') {
+      console.log('Switching to offline mode due to connection error');
+      this.isOfflineMode = true;
+      this.emit('offlineMode', true);
+    }
   }
   
   /**

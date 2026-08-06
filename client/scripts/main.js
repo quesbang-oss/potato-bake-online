@@ -113,6 +113,13 @@ class Application {
       this.uiManager.showNotification(error, 'error');
     });
     
+    this.networkManager.on('offlineMode', (isOffline) => {
+      console.log('Offline mode:', isOffline);
+      if (isOffline) {
+        this.uiManager.showNotification('オフラインモードで動作中（マルチプレイは利用できません）', 'info');
+      }
+    });
+    
     // ゲームイベント
     this.gameEngine.on('gameStarted', () => {
       console.log('Game started');

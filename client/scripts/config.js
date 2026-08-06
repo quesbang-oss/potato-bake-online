@@ -5,14 +5,17 @@
 
 export const config = {
   // WebSocketサーバーのURL
-  // RenderでデプロイしたサーバーのURLに変更してください
+  // サーバーが利用できない場合、オフラインモードで動作
   wsUrl: import.meta.env.VITE_WS_URL || 
-         (window.location.hostname === 'localhost' ? 'ws://localhost:8080' : 'wss://potato-bake-online-server.onrender.com'),
+         (window.location.hostname === 'localhost' ? 'ws://localhost:8080' : null),
   
   // APIエンドポイント
   apiBaseUrl: import.meta.env.VITE_API_URL || 
-              (window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://potato-bake-online-server.onrender.com'),
+              (window.location.hostname === 'localhost' ? 'http://localhost:8080' : null),
   
   // デバッグモード
-  debug: import.meta.env.DEV
+  debug: import.meta.env.DEV,
+  
+  // オフラインモード
+  offlineMode: true
 };
