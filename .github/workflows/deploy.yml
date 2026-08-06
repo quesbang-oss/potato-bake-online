@@ -43,6 +43,9 @@ jobs:
           mkdir -p dist/icons
           cp -r client/icons/* dist/icons/ 2>/dev/null || true
 
+      - name: Create .nojekyll file
+        run: touch dist/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
