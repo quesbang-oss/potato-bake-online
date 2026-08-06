@@ -40,6 +40,9 @@ export class NetworkManager extends EventEmitter {
       this.emit('offlineMode', true);
       return;
     }
+    
+    // 自動接続を試みる
+    this.connect();
   }
   
   /**

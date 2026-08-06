@@ -13,6 +13,26 @@ const wss = new WebSocketServer({ server });
 // ミドルウェア設定
 app.use(express.json());
 
+// CORS設定
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// ルートエンドポイント
+app.get('/', (req, res) => {
+  res.json({ 
+    service: 'Potato Bake Online WebSocket Server',
+    status: 'running',
+    version: '1.0.0'
+  });
+});
+
 // ヘルスチェックエンドポイント
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
